@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "aws-org-inventory"
+version = "0.1.0"
+description = ""
+authors = ["Iain Samuel McLean Elder <iain@isme.es>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+botocove = "^1.3.1"
+boto3 = "^1.18.52"
+pandas = "^1.3.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+ipython = "^7.28.0"
+
+[tool.poetry.scripts]
+aws-org-inventory = "aws_org_inventory:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
