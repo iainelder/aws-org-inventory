@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "aws-org-inventory"
 version = "0.1.0"
-description = ""
+description = " Dumps to CSV all the resources in an organization's member accounts"
 authors = ["Iain Samuel McLean Elder <iain@isme.es>"]
 
 [tool.poetry.dependencies]
