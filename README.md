@@ -18,6 +18,14 @@ Sadly [AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/reso
 
 AWS Config's organization aggregators are great, but they may not update instantly with new resources.
 
+## Installation
+
+The package is published to PyPy as aws-org-inventory, so you can install it with pip or anything equivalent.
+
+```
+pip install aws-org-inventory
+```
+
 ## Basic example
 
 Configure environment:
@@ -67,6 +75,15 @@ Invalid session Account IDs as list: ['111111111111']
 
 That account's resources will not be included in the main output.
 
+## Development
+
+Use Poetry to build and push a new version to PyPI.
+
+```bash
+poetry build
+poetry publish
+```
+
 ## TODO
 
 TODO: query multiple regions (see aws-boto-multiregion-client for example)
@@ -79,3 +96,4 @@ TODO: improve CLI
 
 TODO: Use boto's service model to automate the parameters given a resource type
 
+TODO: improve error handling
