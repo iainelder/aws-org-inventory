@@ -9,6 +9,7 @@ python = "^3.8"
 botocove = "^1.3.1"
 boto3 = "^1.18.52"
 pandas = "^1.3.3"
+boto-collator-client = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

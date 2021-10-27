@@ -37,6 +37,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "boto-collator-client"
+version = "0.1.1"
+description = "A boto3 client wrapper that collates each paginated API call into a single result"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[[package]]
 name = "boto3"
 version = "1.18.52"
 description = "The AWS SDK for Python"
@@ -387,7 +395,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "685ecdfeda49229766ccefd4371caaa99a18f984437f031b4d4bf97348013821"
+content-hash = "36722de8a3d3ae8e21c0ace58fa520399495f21cdea2038a2f0c7a5b26e50c37"
 
 [metadata.files]
 appnope = [
@@ -405,6 +413,10 @@ attrs = [
 backcall = [
     {file = "backcall-0.2.0-py2.py3-none-any.whl", hash = "sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255"},
     {file = "backcall-0.2.0.tar.gz", hash = "sha256:5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e"},
+]
+boto-collator-client = [
+    {file = "boto-collator-client-0.1.1.tar.gz", hash = "sha256:010b9ff460611dab8721768a5ebacc156e65737621f5a29f93ec6006f2d11579"},
+    {file = "boto_collator_client-0.1.1-py3-none-any.whl", hash = "sha256:ae5993abd4c458f3d15d848c79bc0204d9c8f2432939eb49928478313ead5c9d"},
 ]
 boto3 = [
     {file = "boto3-1.18.52-py3-none-any.whl", hash = "sha256:27824d3767c5213f0006f71e552b912bc4659241b77ca8b0be0b813cf0518a9e"},

@@ -10,6 +10,8 @@ import pandas as pd
 import botocove
 import boto3
 
+from boto_collator_client import CollatorClient
+
 __version__ = '0.1.0'
 
 def main():
@@ -59,9 +61,8 @@ class AWSOrgInventory(object):
 
         @botocove.cove(rolename=self.role_name, role_session_name=self.role_session_name)
         def _collect_from_org(session, service, api):
-            logs = session.client(service)
-            paginator = logs.get_paginator(api)
-            return paginator.paginate().build_full_result()
+            cc = CollatorClient(session.client(service))
+            return getattr(cc, api)()
 
 
         self.response = _collect_from_org(self.service, self.api)
