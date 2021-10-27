@@ -38,18 +38,22 @@ export AWS_DEFAULT_REGION=eu-west-1
 Dump inventory of CloudWatch log groups:
 
 ```bash
-poetry run aws-org-inventory logs describe_log_groups logGroups
+aws-org-inventory logs describe_log_groups logGroups
 ```
 
 Dump inventory of support cases:
 
 ```bash
-poetry run aws-org-inventory support describe_cases cases
+aws-org-inventory support describe_cases cases
+```
+
+Dump inventory of EC2 key pairs:
+
+```bash
+aws-org-inventory ec2 describe_key_pairs KeyPairs
 ```
 
 Try doing those with AWS Config!
-
-On stderr you will always see a summary of the botocove result and any exceptions. These exceptions may reveal problems such as an incorrect command invocation, a misconfigured AWS account, or a bug in the program (feel free to report those!)
 
 ## General use
 
@@ -65,7 +69,9 @@ Find in the method's response syntax the top-level key for the list of objects.
 
 The name of the key is parameter 3.
 
-## Invalid sessions
+## Error output
+
+On stderr you will always see a summary of the botocove result and any exceptions. These exceptions may reveal problems such as an incorrect command invocation, a misconfigured AWS account, or a bug in the program (feel free to report those!)
 
 If Botocove fails to get a session for an account, it will output the ID to stderr like this.
 
