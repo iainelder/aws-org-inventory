@@ -53,6 +53,12 @@ Dump inventory of EC2 key pairs:
 aws-org-inventory ec2 describe_key_pairs KeyPairs
 ```
 
+Dump inventory of account alises:
+
+```bash
+aws-org-inventory iam list_account_alises AccountAliases
+```
+
 Try doing those with AWS Config!
 
 ## General use

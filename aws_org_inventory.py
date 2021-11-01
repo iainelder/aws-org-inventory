@@ -12,7 +12,7 @@ import boto3
 
 from boto_collator_client import CollatorClient
 
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 def main():
 
@@ -77,14 +77,26 @@ class AWSOrgInventory(object):
                 operator.itemgetter(self.resource_type)))
             .loc[lambda df: df["ResourceList"].apply(len) > 0]
             .explode("ResourceList")
-            .apply(lambda row: {**row.to_dict(), **row.ResourceList}, axis=1,
+            .apply(lambda row: {**row.to_dict(), **to_dict(row.ResourceList)}, axis=1,
                 result_type="expand")
             .drop(["Result","ResourceList"], axis=1)
         )
 
+
     def summarize_collection(self):
 
         return {k: sum(1 for e in v) for k, v in self.response.items()}
+
+# This is a hack to support APIs that return a list of strings such as:
+# * iam list_account_aliases AccountAliases
+# * dynamodb list_tables TableNames
+def to_dict(dict_or_scalar):
+
+    return {
+        dict: dict_or_scalar,
+        str: {"Value": dict_or_scalar}
+    }[type(dict_or_scalar)]
+
 
 if __name__ == "__main__":
     main()
