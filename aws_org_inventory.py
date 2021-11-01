@@ -34,7 +34,7 @@ def dump_inventory_to_csv(service, api, resource_type):
             inv
             .collect()
             .results_to_data_frame()
-            .to_csv()
+            .to_csv(index=False)
         )
     except Exception as ex:
         print(traceback.format_exc(), file=sys.stderr)
