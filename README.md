@@ -100,11 +100,13 @@ poetry publish
 
 TODO: query multiple regions (see aws-boto-multiregion-client for example)
 
+TODO: export to JSON by default to simplify the output format (tabularization is tricky)
+
 TODO: ensure that org management account is included in results
 
 TODO: give example of how to use AwsOrgInventory class in other applications
 
-TODO: improve CLI
+TODO: improve CLI (monkey patch awscli.clidriver.CLIOperationCaller._make_client_call)
 
 TODO: Use boto's service model to automate the parameters given a resource type
 
