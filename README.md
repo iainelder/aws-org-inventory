@@ -113,6 +113,14 @@ $ tree
 
 Patience is needed because this is a really inefficient way to collect from multiple APIs and multiple regions. This can definitely be improved in aws-org-inventory itself. I'll be working on that whenver I have the time and the notion.
 
+But isn't the whole point of parallel to run things in ... parallel? Why is max-procs set to 1? 
+
+One reason is to avoid failures from API rate limiting. For example, a single AWS account can handle only a certain frequency of DescribeAccount calls per second.
+
+Another reason is to avoid memory exhaustion which may cause the tool to crash. It needs an amount of memory proportial to the number of accounts in the organization.
+
+I think both of these problems can be fixed in the tools itself such that in the future using GNU Parallel may no longer be necessary. See [aws_recon](https://github.com/darkbitio/aws-recon) for inspiration.
+
 ## General use
 
 To derive arguments for other use cases, check the boto service documentation.
