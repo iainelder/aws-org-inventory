@@ -61,6 +61,58 @@ aws-org-inventory iam list_account_alises AccountAliases
 
 Try doing those with AWS Config!
 
+## Advanced example
+
+Say you need to collect inventory about AWS Config itself. You want to know which config recorders exist and how the delivery streams are configured. You want to do this across multiple regions and multiple organizations.
+
+aws-org-inventory doesn't yet support multiple API calls, multiple regions, or multiple organizations in a single invocation. So one way or another you'll need to perform multiple invocations.
+
+[GNU Parallel](https://www.gnu.org/software/parallel/) offers a neat way to do this. First you export a bash function that takes a profile and a region as parameters and saves the results of all the invocations of aws-org-inventory. Then you invoke the function via parallel passing the a list of profiles and a list of regions. parallel iterates over the cartesian product of the parameters to collect all the data.
+
+You can use a script like this to drive the whole process.
+
+```bash
+cd "$(mktemp --dir)"
+
+collect() {
+    profile="${1}"
+    region="${2}"
+
+    AWS_PROFILE="${profile}" \
+    AWS_DEFAULT_REGION="${region}" \
+    aws-org-inventory config describe_configuration_recorders ConfigurationRecorders \
+    > "configuration_recorders__${profile}__${region}.csv"
+
+    AWS_PROFILE="${profile}" \
+    AWS_DEFAULT_REGION="${region}" \
+    aws-org-inventory config describe_delivery_channels DeliveryChannels \
+    > "delivery_channels__${profile}__${region}.csv"
+}
+
+export -f collect
+
+time parallel --max-procs 1 collect \
+::: org_A org_B \
+::: us-east-1 eu-west-1
+```
+
+With some patience you will end up with a result like this.
+
+```text
+$ tree
+.
+├── configuration_recorders__org_A__eu-west-1.csv
+├── configuration_recorders__org_A__us-east-1.csv
+├── configuration_recorders__org_B__eu-west-1.csv
+├── configuration_recorders__org_B__us-east-1.csv
+├── delivery_channels__org_A__eu-west-1.csv
+├── delivery_channels__org_A__us-east-1.csv
+├── delivery_channels__org_B__eu-west-1.csv
+├── delivery_channels__org_B__us-east-1.csv
+```
+
+Patience is needed because this is a really inefficient way to collect from multiple APIs and multiple regions. This can definitely be improved in aws-org-inventory itself. I'll be working on that whenver I have the time and the notion.
+
 ## General use
 
 To derive arguments for other use cases, check the boto service documentation.
