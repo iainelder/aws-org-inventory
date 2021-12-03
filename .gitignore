@@ -1,1 +1,5 @@
+# Python compiled bytecode
 __pycache__/
+
+# Poetry build output
+dist/
