@@ -61,6 +61,8 @@ aws-org-inventory iam list_account_alises AccountAliases
 
 Try doing those with AWS Config!
 
+The successful command outputs a CSV file to standard out. (TODO: show example of columns from each of the example commands)
+
 ## Advanced example
 
 Say you need to collect inventory about AWS Config itself. You want to know which config recorders exist and how the delivery streams are configured. You want to do this across multiple regions and multiple organizations.
@@ -139,13 +141,24 @@ The name of the key is parameter 3.
 
 On stderr you will always see a summary of the botocove result and any exceptions. These exceptions may reveal problems such as an incorrect command invocation, a misconfigured AWS account, or a bug in the program (feel free to report those!)
 
-If Botocove fails to get a session for an account, it will output the ID to stderr like this.
+```text
+{'Results': 237, 'Exceptions': 11, 'FailedAssumeRole': 0}
+```
+
+If Botocove fails to get a session for an account, That account's resources will not be included in the main output. Botocove will output the account ID to stderr like this:
 
 ```text
 Invalid session Account IDs as list: ['111111111111']
 ```
 
-That account's resources will not be included in the main output.
+
+If the AWS API raises an exception, its error output will printed to standard error and the account's details will not be included in the main output.
+
+For example, if you try to get the enabled standards in an account not enabled for Security Hub:
+
+```text
+[{'Id': '111111111111', 'Email': '111111111111@example.com', 'Name': 'Account 1', 'Status': 'ACTIVE', 'AssumeRoleSuccess': True, 'ExceptionDetails': [InvalidAccessException('An error occurred (InvalidAccessException) when calling the GetEnabledStandards operation: Account 111111111111 is not subscribed to AWS Security Hub'), ...]}
+```
 
 ## Development
 
