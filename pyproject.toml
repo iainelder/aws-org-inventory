@@ -13,7 +13,7 @@ boto-collator-client = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
-ipython = "^7.28.0"
+ipython = "^7.31.1"
 
 [tool.poetry.scripts]
 aws-org-inventory = "aws_org_inventory:main"
