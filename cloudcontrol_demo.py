@@ -1,8 +1,8 @@
-import sys
 import json
+import sys
 
-import pandas
 import boto3
+import pandas
 
 
 def main():
@@ -25,11 +25,8 @@ def list_resources(type_name):
 
 def flatten_resource(resource, response):
     return {
-        **{
-            "Identifier": resource["Identifier"],
-            "TypeName": response["TypeName"]
-        },
-        **json.loads(resource["Properties"])
+        **{"Identifier": resource["Identifier"], "TypeName": response["TypeName"]},
+        **json.loads(resource["Properties"]),
     }
 
 
