@@ -1,0 +1,27 @@
+---
+name: Testing
+
+on:  # yamllint disable-line rule:truthy
+  - push
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --verbose
+
+      - name: Run pre-commit tests
+        run: poetry run pre-commit run --all-files
