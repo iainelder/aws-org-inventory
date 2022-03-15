@@ -162,11 +162,17 @@ For example, if you try to get the enabled standards in an account not enabled f
 
 ## Development
 
-Use Poetry to build and push a new version to PyPI.
+A GitHub Actions workflow contains the continuous integration (CI) tests. You can run it locally using [act](https://github.com/nektos/act).
 
 ```bash
-poetry build
-poetry publish
+act
+```
+
+Another GitHub Actions workflow publishes to the
+[Python Package Index (PyPI)](https://pypi.org/project/aws-org-inventory/). Run the workflow locally like this (the final publish step will probably fail):
+
+```
+act release
 ```
 
 ## TODO
