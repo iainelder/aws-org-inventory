@@ -31,6 +31,13 @@ repos:
   - repo: local
     hooks:
       - id: system
+        name: pytest
+        entry: poetry run pytest -vv .
+        pass_filenames: false
+        language: system
+  - repo: local
+    hooks:
+      - id: system
         name: Codespell commit message
         entry: poetry run codespell .git/COMMIT_EDITMSG
         pass_filenames: false
