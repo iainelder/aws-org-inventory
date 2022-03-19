@@ -1,3 +1,5 @@
+# type: ignore
+
 import re
 from dataclasses import dataclass
 from pprint import pprint
