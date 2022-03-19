@@ -11,8 +11,6 @@ import botocove
 import pandas as pd
 from boto_collator_client import CollatorClient
 
-__version__ = "0.5.0"
-
 
 def main():
 
