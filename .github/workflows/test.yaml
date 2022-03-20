@@ -24,4 +24,4 @@ jobs:
         run: poetry install --no-interaction --verbose
 
       - name: Run pre-commit tests
-        run: poetry run pre-commit run --all-files
+        run: poetry run pre-commit run --verbose --all-files
