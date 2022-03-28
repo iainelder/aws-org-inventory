@@ -1,11 +1,11 @@
 from contextlib import contextmanager
-from typing import Any, ContextManager, Dict, Iterator
+from typing import Any, ContextManager, Iterator
 
-import pytest  # type: ignore[import]
+import pytest
+from pydantic import ValidationError
 from pytest_mock import MockerFixture
 
-import org_config
-from org_config import OrgConfigError
+from org_config import OrgConfig, load_org_config
 
 
 @contextmanager
@@ -19,61 +19,84 @@ def test_load_config_reads_toml(mocker: MockerFixture) -> None:
         "org_config.open",
         mocker.mock_open(
             read_data=(
-                b"[[orgs]]\n"
-                b'org_name = "org1"\n'
+                b'organization_name = "org1"\n'
                 b'management_profile = "profile1"\n'
                 b'regions = ["eu-west-1"]\n'
             )
         ),
     )
 
-    org_config.load()
+    load_org_config()
 
-    org_config.open.assert_called_once_with("orgs.toml", mode=mocker.ANY)  # type: ignore[attr-defined]
+    import org_config
+
+    org_config.open.assert_called_once_with("org_config.toml", mode=mocker.ANY)  # type: ignore[attr-defined]
 
 
-# TODO: check errors using Pydantic ValidationError
+@pytest.mark.parametrize(
+    "parsed_input, expected_exception",
+    [
+        pytest.param(None, pytest.raises(TypeError), id="None"),
+        pytest.param({}, pytest.raises(ValidationError), id="empty dict"),
+        pytest.param(
+            {
+                "organization_name": "",
+                "management_profile": "profile1",
+                "regions": ["eu-west-1"],
+            },
+            pytest.raises(ValidationError),
+            id="empty organization_name",
+        ),
+        pytest.param(
+            {
+                "organization_name": "org1",
+                "management_profile": "",
+                "regions": ["eu-west-1"],
+            },
+            pytest.raises(ValidationError),
+            id="empty management_profile",
+        ),
+        pytest.param(
+            {
+                "organization_name": "org1",
+                "management_profile": "profile1",
+                "regions": [],
+            },
+            pytest.raises(ValidationError),
+            id="empty regions",
+        ),
+        pytest.param(
+            {
+                "organization_name": "org1",
+                "management_profile": "profile1",
+                "regions": ["eu-weset-1", "eu-toybox-1"],
+            },
+            pytest.raises(ValidationError),
+            id="invalid region",
+        ),
+    ],
+)
+def test_invalid_input(
+    parsed_input: Any, expected_exception: ContextManager[Exception]
+) -> None:
+    with expected_exception:
+        OrgConfig(**parsed_input)
 
-# @pytest.mark.parametrize(  # type: ignore[misc]
-#     "config,expectation",
-#     [
-#         pytest.param(
-#             None, pytest.raises(OrgConfigError, match="config is not a dict"), id="None"
-#         ),
-#         pytest.param(
-#             [],
-#             pytest.raises(OrgConfigError, match="config is not a dict"),
-#             id="empty list",
-#         ),
-#         pytest.param(
-#             {},
-#             pytest.raises(OrgConfigError, match="config has no `orgs` key"),
-#             id="empty dict",
-#         ),
-#         pytest.param(
-#             {"bread": "butter"},
-#             pytest.raises(OrgConfigError, match="config has no `orgs` key"),
-#             id="some other key",
-#         ),
-#         pytest.param(
-#             {"orgs": "myorg"},
-#             pytest.raises(OrgConfigError, match="`orgs` key is not a list of orgs"),
-#             id="orgs is string",
-#         ),
-#         pytest.param(
-#             {"orgs": ["myorg"]},
-#             pytest.raises(OrgConfigError, match="`orgs` item at index 0 is not a dict"),
-#             id="orgs list item is string",
-#         ),
-#         pytest.param(
-#             {"orgs": [{}]},
-#             pytest.raises(OrgConfigError, match="`orgs` item at index 0 is not a dict"),
-#             id="orgs list item is string",
-#         ),
-#     ],
-# )
-# def test_empty_config(
-#     config: OrgListInput, expectation: ContextManager[OrgConfigError]
-# ) -> None:
-#     with expectation:
-#         OrgConfig(config)
+
+@pytest.mark.parametrize(
+    "loaded_config",
+    [
+        pytest.param(
+            {
+                "organization_name": "org1",
+                "management_profile": "profile1",
+                "regions": ["eu-west-1"],
+            }
+        )
+    ],
+)
+def test_valid_config(loaded_config: Any) -> None:
+    actual_config = OrgConfig(**loaded_config)
+    assert actual_config.organization_name == "org1"
+    assert actual_config.management_profile == "profile1"
+    assert actual_config.regions == ["eu-west-1"]
