@@ -69,7 +69,7 @@ def test_load_config_reads_toml(mocker: MockerFixture) -> None:
             {
                 "organization_name": "org1",
                 "management_profile": "profile1",
-                "regions": ["eu-weset-1", "eu-toybox-1"],
+                "regions": ["eu-west-1", "eu-toybox-1"],
             },
             pytest.raises(ValidationError),
             id="invalid region",
