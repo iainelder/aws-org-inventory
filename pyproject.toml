@@ -30,6 +30,7 @@ yamllint = "^1.26.3"
 pytest-mock = "^3.7.0"
 mypy = "^0.942"
 pytest = "^7.1.1"
+typing-inspect = "^0.7.1"
 
 [tool.poetry.scripts]
 aws-org-inventory = "aws_org_inventory:main"
